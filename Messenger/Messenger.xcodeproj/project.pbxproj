@@ -20,7 +20,8 @@
 		04915A322665D1220097BECE /* NewConversationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04915A312665D1220097BECE /* NewConversationViewController.swift */; };
 		04915A352665D1370097BECE /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04915A342665D1370097BECE /* ProfileViewController.swift */; };
 		04A28DB72665D80C000E99C8 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04A28DB62665D80C000E99C8 /* Extensions.swift */; };
-		04C70EBC2667433100177E95 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 04C70EBB2667433100177E95 /* GoogleService-Info.plist */; };
+		04C70EC02667580D00177E95 /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04C70EBF2667580D00177E95 /* DatabaseManager.swift */; };
+		04C70ED326675D0F00177E95 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 04C70ED226675D0F00177E95 /* GoogleService-Info.plist */; };
 		8DE5A57E488FF3A65B9F8BDD /* Pods_Messenger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2386DE9BE9608385100BAA4 /* Pods_Messenger.framework */; };
 /* End PBXBuildFile section */
 
@@ -40,7 +41,8 @@
 		04915A312665D1220097BECE /* NewConversationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewConversationViewController.swift; sourceTree = "<group>"; };
 		04915A342665D1370097BECE /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		04A28DB62665D80C000E99C8 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
-		04C70EBB2667433100177E95 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		04C70EBF2667580D00177E95 /* DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
+		04C70ED226675D0F00177E95 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5991DBDCC5F55B68BD297D78 /* Pods-Messenger.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Messenger.debug.xcconfig"; path = "Target Support Files/Pods-Messenger/Pods-Messenger.debug.xcconfig"; sourceTree = "<group>"; };
 		7F430F1D4670FF8AF0DC7352 /* Pods-Messenger.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Messenger.release.xcconfig"; path = "Target Support Files/Pods-Messenger/Pods-Messenger.release.xcconfig"; sourceTree = "<group>"; };
 		E2386DE9BE9608385100BAA4 /* Pods_Messenger.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Messenger.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -79,7 +81,7 @@
 		049159EC2665BE5C0097BECE /* Messenger */ = {
 			isa = PBXGroup;
 			children = (
-				04C70EBB2667433100177E95 /* GoogleService-Info.plist */,
+				04C70ED226675D0F00177E95 /* GoogleService-Info.plist */,
 				04915A072665C0140097BECE /* Resources */,
 				04915A062665BFE70097BECE /* Model */,
 				04915A042665BFD80097BECE /* Views */,
@@ -132,6 +134,7 @@
 				049159ED2665BE5C0097BECE /* AppDelegate.swift */,
 				049159EF2665BE5C0097BECE /* SceneDelegate.swift */,
 				04A28DB62665D80C000E99C8 /* Extensions.swift */,
+				04C70EBF2667580D00177E95 /* DatabaseManager.swift */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -231,7 +234,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				049159FA2665BE5D0097BECE /* LaunchScreen.storyboard in Resources */,
-				04C70EBC2667433100177E95 /* GoogleService-Info.plist in Resources */,
+				04C70ED326675D0F00177E95 /* GoogleService-Info.plist in Resources */,
 				049159F72665BE5D0097BECE /* Assets.xcassets in Resources */,
 				049159F52665BE5C0097BECE /* Main.storyboard in Resources */,
 			);
@@ -287,6 +290,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				04915A252665D0A90097BECE /* LoginViewController.swift in Sources */,
+				04C70EC02667580D00177E95 /* DatabaseManager.swift in Sources */,
 				04915A292665D0BE0097BECE /* RegisterViewController.swift in Sources */,
 				04915A322665D1220097BECE /* NewConversationViewController.swift in Sources */,
 				049159F22665BE5C0097BECE /* ConversationsViewController.swift in Sources */,

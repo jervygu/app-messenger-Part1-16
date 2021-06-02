@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import FirebaseAuth
+import Firebase
 
 class RegisterViewController: UIViewController {
     
@@ -38,13 +38,12 @@ class RegisterViewController: UIViewController {
     
     private let imageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(systemName: "person.fill")
-//        imageView.layer.cornerRadius =
-        imageView.tintColor = .systemGray
+        imageView.image = UIImage(systemName: "person.circle.fill")
+        imageView.tintColor = .secondaryLabel
         imageView.contentMode = .scaleAspectFit
         imageView.layer.masksToBounds = true
         imageView.layer.borderWidth = 2.0
-        imageView.layer.borderColor = UIColor.lightGray.cgColor
+        imageView.layer.borderColor = UIColor.secondaryLabel.cgColor
         
         imageView.clipsToBounds = true
         return imageView
@@ -184,7 +183,11 @@ class RegisterViewController: UIViewController {
         
         // Firebase login
         
-        Auth.auth().createUser(withEmail: email, password: password) { (authResult, error) in
+        Auth.auth().createUser(withEmail: email, password: password) { [weak self] (authResult, error) in
+            guard let strongSelf = self else {
+                return
+            }
+            
             guard let result = authResult, error == nil else {
                 print("\(String(describing: error?.localizedDescription))")
                 return
@@ -193,13 +196,9 @@ class RegisterViewController: UIViewController {
             
             let user = result.user
             print("\(user) Registration Succesful!")
-//            SVProgressHUD.dismiss()
-//            let vc = ConversationsViewController()
-//            self.navigationController?.pushViewController(vc, animated: true)
+            strongSelf.navigationController?.dismiss(animated: true, completion: nil)
             
         }
-        
-        
         
     }
     
