@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class LoginViewController: UIViewController {
     
@@ -123,6 +124,54 @@ class LoginViewController: UIViewController {
         passwordTF.delegate = self
     }
     
+    @objc private func didTapRegister() {
+        let vc = RegisterViewController()
+        vc.title = "Create Account"
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    @objc private func didTapLogin() {
+        
+        emailTF.resignFirstResponder()
+        passwordTF.resignFirstResponder()
+        
+        guard let email = emailTF.text, let password = passwordTF.text,
+              !email.isEmpty, !password.isEmpty, password.count >= 6 else {
+            alertUserLoginError()
+            return
+        }
+        
+        // Firebase login
+        
+        
+        Auth.auth().signIn(withEmail: email, password: password) { (authResult, error) in
+            guard let result = authResult, error == nil else {
+                print("\(self.emailTF.text!)\(String(describing: error?.localizedDescription))")
+                return
+            }
+            // success
+            
+            let user = result.user
+            print("\(user) Login Successful!")
+//            SVProgressHUD.dismiss()
+            let vc = ConversationsViewController()
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
+        
+    }
+    
+    func alertUserLoginError() {
+        let alert = UIAlertController(title: "Invalid log in", message: "Please enter all information to log in.", preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
+        
+        present(alert, animated: true, completion: nil)
+    }
+    
+    @objc private func didTapForgot() {
+        print("Forgotten tapped")
+    }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
@@ -188,39 +237,6 @@ class LoginViewController: UIViewController {
 //        forgotPasswordButton.backgroundColor = .systemGray
     }
     
-    @objc private func didTapRegister() {
-        let vc = RegisterViewController()
-        vc.title = "Create Account"
-        navigationController?.pushViewController(vc, animated: true)
-    }
-    
-    func alertUserLoginError() {
-        let alert = UIAlertController(title: "Invalid log in", message: "Please enter all information to log in.", preferredStyle: .alert)
-        
-        alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
-        
-        present(alert, animated: true, completion: nil)
-    }
-    
-    @objc private func didTapLogin() {
-        
-        emailTF.resignFirstResponder()
-        passwordTF.resignFirstResponder()
-        
-        guard let email = emailTF.text, let password = passwordTF.text,
-              !email.isEmpty, !password.isEmpty, password.count >= 8 else {
-            alertUserLoginError()
-            return
-        }
-        
-        // Firebase login
-        
-    }
-    
-    @objc private func didTapForgot() {
-        print("Forgotten tapped")
-    }
-
 }
 
 extension LoginViewController: UITextFieldDelegate {

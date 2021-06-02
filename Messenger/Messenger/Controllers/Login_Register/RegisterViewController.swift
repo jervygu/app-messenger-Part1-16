@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class RegisterViewController: UIViewController {
     
@@ -37,7 +38,7 @@ class RegisterViewController: UIViewController {
     
     private let imageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(systemName: "person")
+        imageView.image = UIImage(systemName: "person.fill")
 //        imageView.layer.cornerRadius =
         imageView.tintColor = .systemGray
         imageView.contentMode = .scaleAspectFit
@@ -155,6 +156,53 @@ class RegisterViewController: UIViewController {
         presentPhotoActionSheet()
     }
     
+    func alertUserLoginError() {
+        let alert = UIAlertController(title: "Invalid Registration", message: "Please enter all information to create a new account.", preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
+        
+        present(alert, animated: true, completion: nil)
+    }
+    
+    @objc private func didTapRegister() {
+        firstnameTF.resignFirstResponder()
+        lastnameTF.resignFirstResponder()
+        emailTF.resignFirstResponder()
+        passwordTF.resignFirstResponder()
+        
+        guard let firstname = firstnameTF.text,
+              let lastname = lastnameTF.text,
+              let email = emailTF.text,
+              let password = passwordTF.text,
+              !firstname.isEmpty,
+              !lastname.isEmpty,
+              !email.isEmpty,
+              !password.isEmpty, password.count >= 6 else {
+            alertUserLoginError()
+            return
+        }
+        
+        // Firebase login
+        
+        Auth.auth().createUser(withEmail: email, password: password) { (authResult, error) in
+            guard let result = authResult, error == nil else {
+                print("\(String(describing: error?.localizedDescription))")
+                return
+            }
+            // success
+            
+            let user = result.user
+            print("\(user) Registration Succesful!")
+//            SVProgressHUD.dismiss()
+//            let vc = ConversationsViewController()
+//            self.navigationController?.pushViewController(vc, animated: true)
+            
+        }
+        
+        
+        
+    }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
@@ -177,7 +225,7 @@ class RegisterViewController: UIViewController {
         imageView.layer.cornerRadius = imageSize/2
 //        imageView.backgroundColor = .systemRed
         
-        emailTF.frame = CGRect(
+        firstnameTF.frame = CGRect(
             x: 0,
             y: imageView.bottom+10,
             width: container.width,
@@ -186,12 +234,12 @@ class RegisterViewController: UIViewController {
         
         dividerView.frame = CGRect(
             x: -2,
-            y: emailTF.bottom,
+            y: firstnameTF.bottom,
             width: view.width-36,
             height: 1)
 //        dividerView.backgroundColor = .systemPink
         
-        passwordTF.frame = CGRect(
+        lastnameTF.frame = CGRect(
             x: 0,
             y: dividerView.bottom,
             width: container.width,
@@ -200,12 +248,12 @@ class RegisterViewController: UIViewController {
         
         dividerView2.frame = CGRect(
             x: -2,
-            y: passwordTF.bottom,
+            y: lastnameTF.bottom,
             width: view.width-36,
             height: 1)
 //        dividerView2.backgroundColor = .systemPink
         
-        firstnameTF.frame = CGRect(
+        emailTF.frame = CGRect(
             x: 0,
             y: dividerView2.bottom,
             width: container.width,
@@ -214,12 +262,12 @@ class RegisterViewController: UIViewController {
         
         dividerView3.frame = CGRect(
             x: -2,
-            y: firstnameTF.bottom,
+            y: emailTF.bottom,
             width: view.width-36,
             height: 1)
 //        dividerView3.backgroundColor = .systemPink
         
-        lastnameTF.frame = CGRect(
+        passwordTF.frame = CGRect(
             x: 0,
             y: dividerView3.bottom,
             width: container.width,
@@ -228,39 +276,9 @@ class RegisterViewController: UIViewController {
         
         registerButton.frame = CGRect(
             x: 0,
-            y: lastnameTF.bottom+10,
+            y: passwordTF.bottom+10,
             width: container.width,
             height: 40)
-        
-    }
-    
-    func alertUserLoginError() {
-        let alert = UIAlertController(title: "Invalid Registration", message: "Please enter all information to create a new account.", preferredStyle: .alert)
-        
-        alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
-        
-        present(alert, animated: true, completion: nil)
-    }
-    
-    @objc private func didTapRegister() {
-        emailTF.resignFirstResponder()
-        passwordTF.resignFirstResponder()
-        firstnameTF.resignFirstResponder()
-        lastnameTF.resignFirstResponder()
-        
-        guard let email = emailTF.text,
-              let password = passwordTF.text,
-              let firstname = firstnameTF.text,
-              let lastname = lastnameTF.text,
-              !email.isEmpty,
-              !password.isEmpty, password.count >= 8,
-              !firstname.isEmpty,
-              !lastname.isEmpty else {
-            alertUserLoginError()
-            return
-        }
-        
-        // Firebase login
         
     }
     
@@ -269,13 +287,13 @@ class RegisterViewController: UIViewController {
 extension RegisterViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         
-        if textField == emailTF {
-            passwordTF.becomeFirstResponder()
-        } else if textField == passwordTF {
-            firstnameTF.becomeFirstResponder()
-        } else if textField == firstnameTF {
+        if textField == firstnameTF {
             lastnameTF.becomeFirstResponder()
         } else if textField == lastnameTF {
+            emailTF.becomeFirstResponder()
+        } else if textField == emailTF {
+            passwordTF.becomeFirstResponder()
+        } else if textField == passwordTF {
             didTapRegister()
         }
         
