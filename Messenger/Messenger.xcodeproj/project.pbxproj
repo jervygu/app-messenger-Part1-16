@@ -95,8 +95,8 @@
 		04915A032665BFC20097BECE /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				04915A372665D2660097BECE /* Login_Register */,
 				049159F12665BE5C0097BECE /* ConversationsViewController.swift */,
+				04915A372665D2660097BECE /* Login_Register */,
 				04915A2B2665D0DE0097BECE /* PhotoViewerViewController.swift */,
 				04915A2E2665D0F40097BECE /* VideoPlayerViewController.swift */,
 				04915A312665D1220097BECE /* NewConversationViewController.swift */,

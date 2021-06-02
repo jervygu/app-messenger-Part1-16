@@ -15,7 +15,15 @@ class ConversationsViewController: UIViewController {
         view.backgroundColor = .systemRed
         title = "Chats"
         
-        DatabaseManager.shared.test()
+        
+        //TODO: Log out the user and send them back to WelcomeViewController
+//        do {
+//            try Auth.auth().signOut()
+//
+//        } catch {
+//            print("Error, there was a problem signing out.")
+//        }
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {

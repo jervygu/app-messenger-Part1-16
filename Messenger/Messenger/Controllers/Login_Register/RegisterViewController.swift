@@ -150,58 +150,6 @@ class RegisterViewController: UIViewController {
         imageView.addGestureRecognizer(gesture)
     }
     
-    @objc private func didTapChangeProfilePic() {
-        print("Change pic tapped")
-        presentPhotoActionSheet()
-    }
-    
-    func alertUserLoginError() {
-        let alert = UIAlertController(title: "Invalid Registration", message: "Please enter all information to create a new account.", preferredStyle: .alert)
-        
-        alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
-        
-        present(alert, animated: true, completion: nil)
-    }
-    
-    @objc private func didTapRegister() {
-        firstnameTF.resignFirstResponder()
-        lastnameTF.resignFirstResponder()
-        emailTF.resignFirstResponder()
-        passwordTF.resignFirstResponder()
-        
-        guard let firstname = firstnameTF.text,
-              let lastname = lastnameTF.text,
-              let email = emailTF.text,
-              let password = passwordTF.text,
-              !firstname.isEmpty,
-              !lastname.isEmpty,
-              !email.isEmpty,
-              !password.isEmpty, password.count >= 6 else {
-            alertUserLoginError()
-            return
-        }
-        
-        // Firebase login
-        
-        Auth.auth().createUser(withEmail: email, password: password) { [weak self] (authResult, error) in
-            guard let strongSelf = self else {
-                return
-            }
-            
-            guard let result = authResult, error == nil else {
-                print("\(String(describing: error?.localizedDescription))")
-                return
-            }
-            // success
-            
-            let user = result.user
-            print("\(user) Registration Succesful!")
-            strongSelf.navigationController?.dismiss(animated: true, completion: nil)
-            
-        }
-        
-    }
-    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
@@ -278,8 +226,81 @@ class RegisterViewController: UIViewController {
             y: passwordTF.bottom+10,
             width: container.width,
             height: 40)
-        
     }
+    
+    @objc private func didTapChangeProfilePic() {
+        print("Change pic tapped")
+        presentPhotoActionSheet()
+    }
+    
+    func alertUserLoginError(message: String = "Please enter all information to create a new account.") {
+        let alert = UIAlertController(
+            title: "Invalid Registration",
+            message: message,
+            preferredStyle: .alert)
+        
+        alert.addAction(
+            UIAlertAction(
+                title: "Dismiss",
+                style: .cancel,
+                handler: nil))
+        
+        present(alert, animated: true, completion: nil)
+    }
+    
+    @objc private func didTapRegister() {
+        firstnameTF.resignFirstResponder()
+        lastnameTF.resignFirstResponder()
+        emailTF.resignFirstResponder()
+        passwordTF.resignFirstResponder()
+        
+        guard let firstName = firstnameTF.text,
+              let lastName = lastnameTF.text,
+              let email = emailTF.text,
+              let password = passwordTF.text,
+              !firstName.isEmpty,
+              !lastName.isEmpty,
+              !email.isEmpty,
+              !password.isEmpty, password.count >= 6 else {
+            alertUserLoginError()
+            return
+        }
+        
+        
+        
+        // Firebase Register
+        
+        DatabaseManager.shared.userExists(withEmail: email) { [weak self] (exists) in
+            guard let strongSelf = self else {
+                return
+            }
+            
+            guard !exists else {
+                // user already exists
+                strongSelf.alertUserLoginError(message: "The email address is already in use by another account.")
+                return
+            }
+            
+            Auth.auth().createUser(withEmail: email, password: password) { (authResult, error) in
+                
+                guard authResult != nil, error == nil else {
+                    print("\(String(describing: error!.localizedDescription))")
+                    return
+                }
+                // success
+                DatabaseManager.shared.insertUser(
+                    withUser: MessengerUser(
+                        firstName: firstName,
+                        lastName: lastName,
+                        emailAddress: email))
+    //            let user = result.user
+    //            print("\(user) Registration Succesful!")
+                strongSelf.navigationController?.dismiss(animated: true, completion: nil)
+            }
+        }
+    }
+    
+    
     
 }
 
