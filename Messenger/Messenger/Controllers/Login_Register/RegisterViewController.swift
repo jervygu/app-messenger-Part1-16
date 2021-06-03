@@ -233,7 +233,7 @@ class RegisterViewController: UIViewController {
         presentPhotoActionSheet()
     }
     
-    func alertUserLoginError(message: String = "Please enter all information to create a new account.") {
+    func alertUserRegistrationError(message: String = "Please enter all information to create a new account.") {
         let alert = UIAlertController(
             title: "Invalid Registration",
             message: message,
@@ -262,10 +262,9 @@ class RegisterViewController: UIViewController {
               !lastName.isEmpty,
               !email.isEmpty,
               !password.isEmpty, password.count >= 6 else {
-            alertUserLoginError()
+            alertUserRegistrationError()
             return
         }
-        
         
         
         // Firebase Register
@@ -277,7 +276,8 @@ class RegisterViewController: UIViewController {
             
             guard !exists else {
                 // user already exists
-                strongSelf.alertUserLoginError(message: "The email address is already in use by another account.")
+                strongSelf.alertUserRegistrationError(message: "The email address is already in use by another account.")
+                
                 return
             }
             
