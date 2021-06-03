@@ -7,6 +7,7 @@
 
 import UIKit
 import Firebase
+import FBSDKLoginKit
 
 class LoginViewController: UIViewController {
     
@@ -87,6 +88,8 @@ class LoginViewController: UIViewController {
         button.setTitleColor(.label, for: .normal)
         return button
     }()
+    
+    private let fbLoginButton = FBLoginButton()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -122,6 +125,10 @@ class LoginViewController: UIViewController {
         
         emailTF.delegate = self
         passwordTF.delegate = self
+        
+        // FB Login
+        container.addSubview(fbLoginButton)
+        
     }
     
     @objc private func didTapRegister() {
@@ -236,6 +243,14 @@ class LoginViewController: UIViewController {
             width: container.width,
             height: 40)
 //        forgotPasswordButton.backgroundColor = .systemGray
+        
+        let fbLoginBtnSize = container.width/1.5
+        
+        fbLoginButton.frame = CGRect(
+            x: (container.width-fbLoginBtnSize)/2,
+            y: forgotPasswordButton.bottom+10,
+            width: fbLoginBtnSize,
+            height: 40)
     }
     
 }

@@ -12,17 +12,9 @@ class ConversationsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemRed
+        view.backgroundColor = .systemBackground
         title = "Chats"
         
-        
-        //TODO: Log out the user and send them back to WelcomeViewController
-//        do {
-//            try Auth.auth().signOut()
-//
-//        } catch {
-//            print("Error, there was a problem signing out.")
-//        }
         
     }
     
