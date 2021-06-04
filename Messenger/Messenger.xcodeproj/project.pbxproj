@@ -82,12 +82,12 @@
 			isa = PBXGroup;
 			children = (
 				04C70ED226675D0F00177E95 /* GoogleService-Info.plist */,
+				049159FB2665BE5D0097BECE /* Info.plist */,
 				04915A072665C0140097BECE /* Resources */,
 				04915A062665BFE70097BECE /* Model */,
 				04915A042665BFD80097BECE /* Views */,
 				04915A052665BFDE0097BECE /* ViewModels */,
 				04915A032665BFC20097BECE /* Controllers */,
-				049159FB2665BE5D0097BECE /* Info.plist */,
 			);
 			path = Messenger;
 			sourceTree = "<group>";
@@ -186,6 +186,7 @@
 				049159E72665BE5C0097BECE /* Frameworks */,
 				049159E82665BE5C0097BECE /* Resources */,
 				19953F3ECDE50C057F7C7972 /* [CP] Embed Pods Frameworks */,
+				5F638A01B0E078C083C0D2B8 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -280,6 +281,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Messenger/Pods-Messenger-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		5F638A01B0E078C083C0D2B8 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Messenger/Pods-Messenger-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Messenger/Pods-Messenger-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Messenger/Pods-Messenger-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */

@@ -8,6 +8,7 @@
 import UIKit
 import Firebase
 import FBSDKLoginKit
+import GoogleSignIn
 
 class LoginViewController: UIViewController {
     
@@ -94,11 +95,27 @@ class LoginViewController: UIViewController {
         button.permissions = ["public_profile", "email"]
         return button
     }()
+    
+    private let googleSignInButton = GIDSignInButton()
+    
+    private var loginObserver: NSObjectProtocol?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Log In"
         view.backgroundColor = .systemBackground
+        
+        // Observer
+        loginObserver = NotificationCenter.default.addObserver(
+            forName: .didLoginNotification,
+            object: nil,
+            queue: .main) { [weak self] (notification) in
+            guard let strongSelf = self else {
+                return
+            }
+            
+            strongSelf.navigationController?.dismiss(animated: true, completion: nil)
+        }
 
 //        navigationItem.rightBarButtonItem = UIBarButtonItem(
 //            title: "Register",
@@ -132,9 +149,18 @@ class LoginViewController: UIViewController {
         
         // FB Login
         container.addSubview(fbLoginButton)
-        
         fbLoginButton.delegate = self
         
+        // google signin
+        GIDSignIn.sharedInstance()?.presentingViewController = self
+        container.addSubview(googleSignInButton)
+        
+    }
+    
+    deinit {
+        if let observer = loginObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
     }
     
     @objc private func didTapRegister() {
@@ -250,13 +276,20 @@ class LoginViewController: UIViewController {
             height: 40)
 //        forgotPasswordButton.backgroundColor = .systemGray
         
-        let fbLoginBtnSize = container.width/1.5
+        let loginWithBtnSize = container.width/2.5
         
         fbLoginButton.frame = CGRect(
-            x: (container.width-fbLoginBtnSize)/2,
+            x: (container.width-loginWithBtnSize)/2,
             y: forgotPasswordButton.bottom+10,
-            width: fbLoginBtnSize,
+            width: loginWithBtnSize,
             height: 30)
+        
+        googleSignInButton.frame = CGRect(
+            x: (container.width-loginWithBtnSize)/2,
+            y: fbLoginButton.bottom+10,
+            width: loginWithBtnSize,
+            height: 30)
+        
     }
     
 }

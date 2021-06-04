@@ -8,6 +8,7 @@
 import UIKit
 import Firebase
 import FBSDKCoreKit
+import GoogleSignIn
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -27,6 +28,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             didFinishLaunchingWithOptions: launchOptions
         )
         
+        // Google sign in
+        GIDSignIn.sharedInstance()?.clientID = FirebaseApp.app()?.options.clientID
+        GIDSignIn.sharedInstance()?.delegate = self
+        
         return true
     }
           
@@ -37,6 +42,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             sourceApplication: options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String,
             annotation: options[UIApplication.OpenURLOptionsKey.annotation]
         )
+        
+        return GIDSignIn.sharedInstance().handle(url)
 
     }
     
@@ -52,6 +59,68 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
 
+}
+
+extension AppDelegate: GIDSignInDelegate {
+    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
+        guard error == nil else {
+            if let error = error {
+                print("Failed to sign in with google: - \(error.localizedDescription)")
+            }
+            return
+        }
+        
+        guard user != nil else {
+            return
+        }
+        
+        guard let email = user.profile.email,
+              let firstName = user.profile.givenName,
+              let lastName = user.profile.familyName else {
+            return
+        }
+        
+        print("\(String(describing: user.profile.name)) successfully signed in with google.")
+        
+        DatabaseManager.shared.userExists(withEmail: email) { (exists) in
+            if !exists {
+                DatabaseManager.shared.insertUser(
+                    withUser: MessengerUser(
+                        firstName: firstName,
+                        lastName: lastName,
+                        emailAddress: email))
+            }
+        }
+        
+        guard let authentication = user.authentication else {
+            print("Missing auth object off of google user: - \(error.localizedDescription)")
+            return
+        }
+        let credential = GoogleAuthProvider.credential(
+            withIDToken: authentication.idToken,
+            accessToken: authentication.accessToken)
+        
+        Auth.auth().signIn(with: credential) { (authResult, error) in
+            guard authResult != nil, error == nil else {
+                print("Failed to sign in with google credential. - \(String(describing: error?.localizedDescription))")
+                return
+            }
+            
+            print("Successfully signed in with google credentials.")
+            NotificationCenter.default.post(name: .didLoginNotification, object: nil)
+        }
+        
+    }
+    
+    func sign(_ signIn: GIDSignIn!, didDisconnectWith user: GIDGoogleUser!, withError error: Error!) {
+        // Perform any operations when the user disconnects from app here.
+        
+        print("Google user was disconnected.")
+        
+    }
+    
+    
+    
 }
     
 
